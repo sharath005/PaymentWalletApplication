@@ -1,0 +1,44 @@
+package com.cg.paymentapp.beans;
+import java.io.Serializable;
+import java.math.BigDecimal;
+@entity
+public class Wallet implements Serializable{
+	@Id
+	private int walletId;
+	private BigDecimal balance;
+	
+	public Wallet(){
+		
+	}
+	public Wallet(BigDecimal amount) {
+		this.balance=amount;
+	}
+	
+	public Wallet(int walletId, BigDecimal balance) {
+		super();
+		this.walletId = walletId;
+		this.balance = balance;
+	}
+	
+	public int getWalletId() {
+		return walletId;
+	}
+	
+	public void setWalletId(int walletId) {
+		this.walletId = walletId;
+	}
+	
+	public BigDecimal getBalance() {
+		return balance;
+	}
+	
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+	
+	@Override
+	public String toString() {
+		return " balance= "+balance;
+	}
+
+}
