@@ -1,32 +1,73 @@
-package com.trg.boot;
+package com.trg.boot.entity;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 @Entity
-@Table(name="BenificiaryDetails")
+@Table(name = "Benfdetails")
 public class BenificiaryDetails {
-@Id
-@Column(name="Details")
-private int benificiaryId;
-private String name;
-private String mobileNumber;
-public int getBenificiaryId() {
+	@Id
+	@Column(name = "benfid")
+	private int benificiaryId;
+	private String name;
+	private String mobileNumber;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "walletid", referencedColumnName = "wid")
+	private Wallet wallet;
+
+	public BenificiaryDetails() {
+
+	}
+
+	public BenificiaryDetails(int benificiaryId, String name, String mobileNumber, Wallet wallet) {
+		super();
+		this.benificiaryId = benificiaryId;
+		this.name = name;
+		this.mobileNumber = mobileNumber;
+		this.wallet = wallet;
+	}
+
+	public int getBenificiaryId() {
 		return benificiaryId;
 	}
-public void setBenificiaryId(int benificiaryId) {
+
+	public void setBenificiaryId(int benificiaryId) {
 		this.benificiaryId = benificiaryId;
 	}
-public String getName() {
+
+	public String getName() {
 		return name;
 	}
-public void setName(String name) {
+
+	public void setName(String name) {
 		this.name = name;
 	}
-public String getMobileNumber() {
+
+	public String getMobileNumber() {
 		return mobileNumber;
 	}
-public void setMobileNumber(String mobileNumber) {
+
+	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
+
+	public Wallet getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
+	}
+
+	@Override
+	public String toString() {
+		return "BenificiaryDetails [benificiaryId=" + benificiaryId + ", name=" + name + ", mobileNumber="
+				+ mobileNumber + ", wallet=" + wallet + "]";
+	}
+
 }
