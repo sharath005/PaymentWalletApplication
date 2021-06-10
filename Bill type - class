@@ -1,0 +1,6 @@
+package com.trg.boot.entity;
+
+public enum BillType {
+	DTH,MobilePrepaid,MobilePostpaid,CreditCard,LICPremium,LPG;
+
+}
