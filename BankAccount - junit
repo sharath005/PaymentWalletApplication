@@ -1,0 +1,75 @@
+package com.trg.boot;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.trg.boot.entity.BankAccount;
+import com.trg.boot.entity.Wallet;
+import com.trg.boot.repository.IAccountRepository;
+import com.trg.boot.repository.WalletRepository;
+
+@SpringBootTest
+public class IAccountServicetests {
+	@Autowired
+	IAccountRepository arepo;
+	@Autowired
+	WalletRepository wrepo;
+	
+	@Test
+	@Order(1)
+	     public void addAccountTest() {
+		     BankAccount ba = new BankAccount();
+		     ba.setAccountNo(555);
+		     ba.setIfscCode("abc434");
+		     ba.setBankName("abcd");
+		     ba.setBalance(9542.25);
+		     ba.setWallet(new Wallet(1,new BigDecimal(9542.25)));
+		     arepo.save(ba);
+		 assertNotNull(arepo.findById(ba.getAccountNo()));
+		 
+	}
+    @Test
+    @Order(2)
+         public void viewAccountTest() {
+        	 BankAccount ba = arepo.findById(555);
+        	 Wallet wt = wrepo.findById(1).get();
+        	 assertThat(wrepo.findById(wt.getWalletId()));
+        	
+         }
+    @Test
+    @Order(3)
+         public void viewBankAccountTest() {
+   	         BankAccount ba = arepo.findById(111);
+	         assertNotEquals(ba.getAccountNo(),555);
+    }
+    
+    @Test
+    @Order(4)
+         public void viewAllAccountTest() {
+    	     List<BankAccount> bankAccountList = arepo.findAll();
+    	     assertThat((bankAccountList).size()>=0);
+    	     
+    }
+    
+    @Test
+    @Order(5)
+         public void deleteBankAccountTest() {
+    	      BankAccount b = arepo.findById(555);
+    	      if(b!=null) {
+    	    	  arepo.delete(b);
+    	      }
+    	      BankAccount ba=arepo.findById(555);
+    	      assertThat(ba == null);
+    }
+}
