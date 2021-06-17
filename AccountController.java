@@ -2,6 +2,8 @@ package com.trg.boot.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,9 @@ public class AccountController {
       IAccountService ia;
       
       @PostMapping()
-      public ResponseEntity<String> addAccount(@RequestBody BankAccount bacc){
+      public ResponseEntity<String> addAccount(@Valid@RequestBody BankAccount bacc){
     	  Wallet wa = ia.addAccount(bacc);
-    	  if (wa != null) 
-    		  return new ResponseEntity<>("Your account added",HttpStatus.OK);
-    	  
-    	  return new ResponseEntity<>("Account not found to be added!!",HttpStatus.BAD_REQUEST);
+    	  return new ResponseEntity<>("Account added successfully!!",HttpStatus.OK);
 	  
     	  
       }
@@ -38,9 +37,8 @@ public class AccountController {
       @DeleteMapping("{bacc}")
       public ResponseEntity<?> removeAccount(@PathVariable  int bacc){
     	  Wallet ra = ia.removeAccount(bacc);
-    	  if (ra != null)
-    		  return new ResponseEntity<>("Account is deleted for the wallet",HttpStatus.OK);
-    	  return new ResponseEntity<>("Account not found to be deleted!!",HttpStatus.BAD_REQUEST);
+    		  return new ResponseEntity<>("Account is deleted from the wallet",HttpStatus.OK);
+    	  
       }
       
       
@@ -48,9 +46,9 @@ public class AccountController {
       public ResponseEntity<?> viewAccount(@PathVariable("bacc") int bacc){
     	  Wallet va = ia.viewAccount(bacc);
     	  
-    	  if(va != null)
+    	  
     		  return new ResponseEntity<>(va , HttpStatus.OK);
-    	  return new ResponseEntity<>("Account not found", HttpStatus.BAD_REQUEST);
+    	
     	
     	  
       }
@@ -58,20 +56,19 @@ public class AccountController {
       public ResponseEntity<?> viewBankAccount(@PathVariable("bacc")  int bacc){
     	  BankAccount va = ia.viewBankAccount(bacc);
     	  
-    	  if(va != null)
+    	 
     		  return new ResponseEntity<>(va , HttpStatus.OK);
-    	  return new ResponseEntity<>("Account not found", HttpStatus.BAD_REQUEST);
+    	 
     	  
       }
       
   @GetMapping()
       public ResponseEntity<?> viewAllAccount(){
     	  List<BankAccount> ba = ia.viewAllAccounts();
-    	  if (ba != null) 
+    	 
     		  return new ResponseEntity<>(ba ,HttpStatus.OK);
     	  
-    	  return new ResponseEntity<>("Account not displayed",HttpStatus.BAD_REQUEST);
-	  
+    	
     	  
       }
 	
@@ -85,3 +82,4 @@ public class AccountController {
       
 	
 }
+
