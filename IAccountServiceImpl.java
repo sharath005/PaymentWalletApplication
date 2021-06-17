@@ -24,11 +24,11 @@ public class IAccountServiceImpl implements IAccountService{
 		Wallet w=bacc.getWallet();
 		
 		
-	    if(wrepo.existsById(w.getWalletId())) {
+	    if(wrepo.existsById(w.getWalletId()) && !ia.existsById(bacc.getAccountNo())) {
 	    	ia.save(bacc);
 	    	return w;
 	    }
-	    throw new InvalidUserInputException("No Wallet Found");
+	    throw new InvalidUserInputException("Wallet doesn't exsists or Account already exists");
 	   	}
 
 	   
@@ -44,7 +44,7 @@ public class IAccountServiceImpl implements IAccountService{
 		else {
 			BankAccount ba=ia.findById(bacc);
 			Wallet w=ba.getWallet();
-			ba.setWallet(null);
+			//ba.setWallet(null);
 			ia.delete(ba);
 			return w;			
 		}
@@ -54,7 +54,7 @@ public class IAccountServiceImpl implements IAccountService{
 	public Wallet viewAccount(int bacc) {
 		boolean b=ia.existsById(bacc);
 		if(!b)
-			throw new InvalidUserInputException("Bank account with Accno "+bacc+"not present");
+			throw new InvalidUserInputException("Bank account with Accno "+bacc+" not present");
 		else {
 			BankAccount ba=ia.findById(bacc);
 			Wallet w=ba.getWallet();
