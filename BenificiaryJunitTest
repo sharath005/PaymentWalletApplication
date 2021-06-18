@@ -1,0 +1,161 @@
+package com.trg.boot;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+
+import com.trg.boot.entity.BenificiaryDetails;
+import com.trg.boot.entity.Wallet;
+import com.trg.boot.exceptions.InvalidInputException;
+import com.trg.boot.repository.BenificiaryRepository;
+import com.trg.boot.repository.IUserRepository;
+import com.trg.boot.repository.WalletRepository;
+import com.trg.boot.serviceinterface.BenificiaryService;
+
+@SpringBootTest
+class PaymentWalletApplicationTests {
+		@Autowired
+		BenificiaryRepository brepo;
+		@Autowired
+		IUserRepository iurepo;
+		@Autowired
+		WalletRepository wrepo;
+		@Autowired
+		BenificiaryService benificiaryService;
+		@Test
+		void contextLoads() {
+		}
+		
+		@Test
+		public void addBenificiaryTest() {
+			BenificiaryDetails bd  = new BenificiaryDetails(); 
+			bd.setBenificiaryId(8);
+			bd.setMobileNumber("8564566");
+			bd.setName("sharath");
+			bd.setWallet(new Wallet(105, new BigDecimal(5555.00)));
+			brepo.save(bd);
+			assertNotNull(brepo.findById(bd.getBenificiaryId()));		
+			
+		}
+		
+		@Test
+		public void addBenificiaryExpectExceptionTest() {
+			BenificiaryDetails bd  = new BenificiaryDetails(); 
+			bd.setBenificiaryId(12);
+			bd.setMobileNumber("8564566");
+			bd.setName("sharath");
+			bd.setWallet(new Wallet(105, new BigDecimal(5555.00)));
+			assertThrows(InvalidInputException.class,()->benificiaryService.addBenificiary(bd));		
+			
+		}
+		@Test
+		public void updateBenficiaryTest() {
+			
+			BenificiaryDetails bd  = new BenificiaryDetails(); 
+			bd.setBenificiaryId(8);
+			bd.setMobileNumber("8564566");
+			bd.setName("sharath kumar");
+			bd.setWallet(new Wallet(105, new BigDecimal(5555.00)));
+			
+			brepo.save(bd);
+			BenificiaryDetails bd2  =	brepo.findById(bd.getBenificiaryId());
+			
+			assertEquals("sharath kumar", bd2.getName());
+			
+		}
+		@Test
+		public void updateBenficiaryExpectExceptionTest() {
+			
+			BenificiaryDetails bd  = new BenificiaryDetails(); 
+			bd.setBenificiaryId(12);
+			bd.setMobileNumber("8564566");
+			bd.setName("sharath");
+			bd.setWallet(new Wallet(105, new BigDecimal(5555.00)));
+			assertThrows(InvalidInputException.class,()->benificiaryService.addBenificiary(bd));		
+			
+		}
+			
+		
+		@Test
+		public void viewBenficiaryTest() {
+			
+			
+			
+			BenificiaryDetails bd2  =	brepo.findById(8);
+			
+			assertEquals(bd2.getBenificiaryId(),8);
+					
+			
+		}
+		@Test
+public void viewBenficiaryExpectExceptionTest() {
+			
+	
+	
+	assertThrows(InvalidInputException.class,()->benificiaryService.viewBenificiary(92));	
+		}
+		
+		@Test
+		public void viewAllBenficiaryTest() {
+
+			
+			List<BenificiaryDetails> benficiaryDetailsList  = 	brepo.findAll();
+			
+			assertThat((benficiaryDetailsList).size()>=0);
+					
+			
+		}
+		
+		@Test
+		public void viewAllBenficiaryExpectExceptionTest() {
+
+			
+				
+			
+			assertThrows(InvalidInputException.class,()->benificiaryService.viewAllBenificiary(95));
+					
+			
+		}
+		
+		@Test
+		public void deleteBenficiaryTest() {
+			
+			BenificiaryDetails b=brepo.findById(8);
+
+			if(b!=null) {
+				
+			brepo.delete(b);
+			}
+			BenificiaryDetails b2=brepo.findById(8);
+			
+			assertThat(b2==null);
+					
+			
+		
+		}
+		
+		@Test
+		public void deleteBenficiaryExpectExceptionTest() {
+			
+			BenificiaryDetails b=brepo.findById(8);
+
+			if(b!=null) {
+				
+			brepo.delete(b);
+			}
+			BenificiaryDetails b2=brepo.findById(8);
+			
+			
+			assertThrows(InvalidDataAccessApiUsageException.class,()->brepo.delete(b2));			
+			
+		
+		}
+}
